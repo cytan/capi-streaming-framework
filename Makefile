@@ -1,5 +1,6 @@
 # globals
 APP               = example
+PSL_VER           = 8
 
 # dirs
 PSLSE_DIR         = sim/pslse
@@ -14,6 +15,7 @@ CPP               = c++
 # flags
 CFLAGS            = -O3 -Wall -m64
 
+pslse-build: export PSLVER=$(PSL_VER)
 pslse-build:
 	cd $(PSLSE_DIR)/afu_driver/src && make clean && BIT32=y make
 	cd $(PSLSE_DIR)/pslse && make clean && make DEBUG=1
@@ -30,4 +32,4 @@ sim-run:
 	cd sim && ../$(APP_DIR)/sim-build/$(APP) $(ARGS)
 
 vsim-run:
-	cd sim && vsim -do vsim.tcl
+	cd sim && vsim -do 'do vsim.tcl $(PSL_VER)'

@@ -1,5 +1,19 @@
+if { [info exists 1] !=  1 } {
+    puts "Please pass in the PSLVER as a number"
+    exit
+} else {
+    set PSLVER $1
+}
+
+if { $PSLVER != 8 && $PSLVER != 9 } {
+    puts "Invalid PSLVER!"
+    exit
+}
+
 # recompile
 proc r  {} {
+
+  global PSLVER
 
   # compile vhdl files
 
@@ -31,14 +45,16 @@ proc r  {} {
   # compile verilog files
 
   # compile top level
+  # -sv is needed because modelsim doesn't recognise import "dpi-c"
+  # as valid for v files
   echo "Compiling top level"
-  vlog -quiet       pslse/afu_driver/verilog/top.v
+  vlog -sv   -quiet +define+PSL$PSLVER pslse/afu_driver/verilog/top.v
 
 }
 
 # simulate
 proc s  {} {
-  vsim -t ns -novopt -c -pli pslse/afu_driver/src/veriuser.sl +nowarnTSCALE work.top
+  vsim -t ns -novopt -c -sv_lib pslse/afu_driver/src/libdpi +nowarnTSCALE work.top
   view wave
   radix h
   log * -r
