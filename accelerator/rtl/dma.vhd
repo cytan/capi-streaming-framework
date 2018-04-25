@@ -320,7 +320,7 @@ begin
       clk                                               => i.cr.clk,
       put                                               => r.write,
       write_address                                     => r.o.c.tag(DMA_TAG_WIDTH - 1 downto 0),
-      data_in                                           => re.wqb(r.wse.pull_engine).data,
+      data_in                                           => re.wqb(0).data, -- VIVADO SCREWS THIS UP re.wqb(r.wse.pull_engine).data,
       read_address                                      => i.b.rtag(DMA_TAG_WIDTH - 1 downto 0),
       data_out                                          => re.wb.data
     );
